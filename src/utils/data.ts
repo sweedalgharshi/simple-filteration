@@ -84,7 +84,8 @@ export const data = [
     progress: "80%",
     status: "Completed",
     date: "12/08/2023",
-    image: "https://example.com/images/noah.jpg",
+    image:
+      "https://images.unsplash.com/photo-1632765854612-9b02b6ec2b15?q=80&w=1886&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
     client: "Emma Martinez",
