@@ -59,23 +59,6 @@ const Table = () => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
   }
 
-  // const filteredProject = projects.filter(
-  //   (project) =>
-  //     searchQuery === "" ||
-  //     (Object.values(project).some((value) =>
-  //       value.toLowerCase().includes(searchQuery.toLowerCase())
-  //     ) &&
-  //       filters.name === "") ||
-  //     (project.client.toLowerCase().includes(filters.name.toLowerCase()) &&
-  //       filters.country === "") ||
-  //     (project.country.toLowerCase().includes(filters.country.toLowerCase()) &&
-  //       filters.email === "") ||
-  //     (project.email.toLowerCase().includes(filters.email.toLowerCase()) &&
-  //       filters.project === "") ||
-  //     (project.project.toLowerCase().includes(filters.project.toLowerCase()) &&
-  //       filters.status === "") ||
-  //     project.status.toLowerCase().includes(filters.status.toLowerCase())
-  // );
   const filteredProjects = projects.filter((project) => {
     return (
       (filters.name === "" || project.client.toLowerCase().includes(filters.name.toLowerCase())) &&
@@ -93,8 +76,18 @@ const Table = () => {
     );
   });
 
+  // Paginations
+  const itemsPerPage = 5;
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentProjects = filteredProjects.slice(startIndex, startIndex + itemsPerPage);
+  const totalPages = Math.ceil(filteredProjects.length / itemsPerPage);
+
+  function handlePageChange(pageNumber: number) {
+    setCurrentPage(pageNumber);
+  }
+
   return (
-    <div className="p-4 overflow-x-auto">
+    <div className="p-4 overflow-hidden">
       <div className="flex items-center mb-5">
         <div className="relative">
           <button
@@ -213,7 +206,7 @@ const Table = () => {
           </thead>
 
           <tbody>
-            {filteredProjects.map((project) => (
+            {currentProjects.map((project) => (
               <tr
                 key={project.email}
                 className="border-b border-gray-700 hover:bg-gray-800 text-sm text-gray-200"
@@ -261,21 +254,19 @@ const Table = () => {
         {/* Pagination */}
         <div className="flex justify-end items-center mt-6 px-4 gap-3">
           <button
-            className={`px-4 py-2 rounded-md text-sm font-medium ${
-              currentPage === 1
-                ? "bg-gray-700 text-gray-400 "
-                : "bg-blue-600 hover:bg-blue-700 text-white"
-            }`}
+            disabled={currentPage === 1}
+            className={`px-4 py-2 rounded-md text-sm font-medium text-white bg-gray-700 disabled:opacity-50 cursor-pointer  disabled:cursor-not-allowed`}
+            onClick={() => handlePageChange(currentPage - 1)}
           >
             Previous
           </button>
-          <span>Page 1 of 4</span>
+          <span className="text-white">
+            Page {currentPage} of {totalPages}
+          </span>
           <button
-            className={`px-4 py-2 rounded-md text-sm font-medium ${
-              currentPage === 1
-                ? "bg-gray-700 text-gray-400 "
-                : "bg-blue-600 hover:bg-blue-700 text-white"
-            }`}
+            disabled={currentPage === totalPages}
+            className={`px-4 py-2 rounded-md text-sm font-medium bg-gray-700 text-white disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed`}
+            onClick={() => handlePageChange(currentPage + 1)}
           >
             Next
           </button>
